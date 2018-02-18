@@ -22,6 +22,14 @@
 
 <script>
   import $ from 'jquery'
+  // 引入基本模板
+  let echarts = require('echarts/lib/echarts')
+  // 引入柱状图组件
+  require('echarts/lib/chart/bar')
+  require('echarts/lib/chart/line')
+  // 引入提示框和title组件
+  require('echarts/lib/component/tooltip')
+  //  require('echarts/lib/component/title')
 export default {
   name: 'homepageRuning',
   components: {
@@ -77,8 +85,6 @@ export default {
 //    this.dogDong9()
 //    this.dogDong10()
     //let dog1 = $('#dog1')
-
-
   },
   methods: {
     dogRun() {
@@ -112,7 +118,7 @@ export default {
         a++
         a>7 ? a=1 : true
       },125);
-    }
+    },
   }
 
 }

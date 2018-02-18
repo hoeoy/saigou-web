@@ -2,6 +2,7 @@
   <div class="header clearfix">
     <div class="header-center clearfix">
       <a href="javascript:;" class="header-logo"></a>
+      <a href="javascript:;" class="header-home" @click="goHome()">去首页</a>
     </div>
   </div>
 </template>
@@ -18,6 +19,13 @@ export default {
   },
   mounted() {
 
+  },
+  methods: {
+    goHome() {
+      this.$router.push({
+        name: 'homepage',
+      })
+    }
   }
 
 }
@@ -40,5 +48,17 @@ export default {
     float: left;
     background-image: url("../../static/img/logo-top2.png");
     /*background-color: pink;*/
+  }
+  .header-home {
+    height: 30px;
+    line-height: 30px;
+    border-radius: 30px;
+    margin-top: 20px;
+    color: black;
+    width: 150px;
+    float: right;
+  }
+  .header-home:hover {
+    background-color: #7f807a;
   }
 </style>

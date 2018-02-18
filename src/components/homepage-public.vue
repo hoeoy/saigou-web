@@ -6,131 +6,173 @@
           <div class="newNumber-logo">
           </div>
           <div class="newNumber-info">
-            <span>最新开奖：</span><span class="leftNum">{{newNumber.nowTimeNum}}</span>
+            <span>最新开奖：</span><span class="leftNum">{{newNumber.current_num}}</span>
             <span class="rightNum-content">
-              每日销售：<span class="rightNum">{{newNumber.total}}</span>期，
-              今日剩余<span class="rightNum">{{newNumber.restTimeNum}}</span>期
+              每日销售：<span class="rightNum">{{newNumber.total_num}}</span>期，
+              今日剩余<span class="rightNum">{{newNumber.rest_num}}</span>期
             </span>
           </div>
         </div>
         <div class="nextNumberBlock">
           <span class="textBlock">
-            <span class="currentnum">第{{currentnum}}期</span>
+            <span class="currentnum">第{{newNumber.current_num}}期</span>
             <span class="currentnum-bot">开奖时间剩余</span>
           </span>
           <span class="resetTime">
-            <span class="time">{{minTime}}</span>
+            <span class="time">{{parseInt(restTime/60)}}</span>
             <span class="text">分</span>
-            <span class="time">{{secTime}}</span>
+            <span class="time">{{restTime%60}}</span>
             <span class="text">秒</span>
           </span>
         </div>
       </div>
-      <div class="trendAndNews">
-        <div class="echarLeft">
-          <div class="title">
-            冠军走势图
-          </div>
-          <div class="echarContent" id="echarContentId">
-          </div>
-        </div>
-        <div class="moreList">
-          <div class="more clearfix">
-            <a :href="moreAddress" class="more_a">更多>></a>
-          </div>
-          <div class="List">
-            <ul>
-              <li v-for="moreList in moreListArr" class="clearfix">
-                <span class="circle_li"></span>
-                <a :href="moreList.address" class="List_li_a nowrap" :title="moreList.name">{{moreList.name}}</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <!--<div class="trendAndNews">-->
+        <!--<div class="echarLeft">-->
+          <!--<div class="title">-->
+            <!--冠军走势图-->
+          <!--</div>-->
+          <!--<div class="echarContent" id="echarContentId">-->
+          <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="moreList">-->
+          <!--<div class="more clearfix">-->
+            <!--<a :href="moreAddress" class="more_a">更多>></a>-->
+          <!--</div>-->
+          <!--<div class="List">-->
+            <!--<ul>-->
+              <!--<li v-for="moreList in moreListArr" class="clearfix">-->
+                <!--<span class="circle_li"></span>-->
+                <!--<a :href="moreList.address" class="List_li_a nowrap" :title="moreList.name">{{moreList.name}}</a></li>-->
+            <!--</ul>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
     </div>
 
   </div>
 </template>
 <script>
   import $ from 'jquery'
-  // 引入基本模板
-  let echarts = require('echarts/lib/echarts')
-  // 引入柱状图组件
-  require('echarts/lib/chart/bar')
-  require('echarts/lib/chart/line')
-  // 引入提示框和title组件
-  require('echarts/lib/component/tooltip')
-//  require('echarts/lib/component/title')
+  import {
+    mapState,
+    mapActions
+  } from 'vuex';
+//  // 引入基本模板
+//  let echarts = require('echarts/lib/echarts')
+//  // 引入柱状图组件
+//  require('echarts/lib/chart/bar')
+//  require('echarts/lib/chart/line')
+//  // 引入提示框和title组件
+//  require('echarts/lib/component/tooltip')
+////  require('echarts/lib/component/title')
 export default {
   name: 'homepage-public',
   data () {
     return {
       newNumber: {
-        total: 200,
-        restTimeNum: 113,
-        nowTimeNum: 166,
+        total_num: 200,
+        rest_num: 113,
+        current_num: 166,
       },
-      currentnum: 377,
-      minTime: 3,
-      secTime: 33,
-      moreAddress: 'www.baidu.com',
-      moreListArr: [
-        {
-          name: '马会俱乐部北京上线奖励活动',
-          address: 'www.baidu.com'
-        },
-        {
-          name: '马会俱乐部群23423423',
-          address: 'www.baidu.com'
-        },
-        {
-          name: '马会俱乐部微信wwwwwwwwwwwwwwwwww',
-          address: 'www.baidu.com'
-        }
-      ]
+      restTime: '100',
+      interval: null,
+//      moreAddress: 'www.baidu.com',
+//      moreListArr: [
+//        {
+//          name: '马会俱乐部北京上线奖励活动',
+//          address: 'www.baidu.com'
+//        },
+//        {
+//          name: '马会俱乐部群23423423',
+//          address: 'www.baidu.com'
+//        },
+//        {
+//          name: '马会俱乐部微信wwwwwwwwwwwwwwwwww',
+//          address: 'www.baidu.com'
+//        }
+//      ]
 
     }
+  },
+  computed: {
+    ...mapState(['rest_time']),
+//    secTime() {
+//      let rest_time = this.rest_time
+//      let secTime = rest_time%60
+//      return secTime
+//    },
   },
   mounted() {
-    this.showEcharts();
+    this.restTime = this.rest_time
+    this.interval = setInterval(d=>{
+      this.restTime = this.restTime - 1
+      if(this.restTime == 0) {
+        clearInterval(this.interval)
+      }
+    },1000);
+    this.getPeriodRetrieveSummery();
+
+//    this.showEcharts();
   },
   methods: {
-    showEcharts() {
-      let myChart = echarts.init(document.getElementById('echarContentId'))
 
-      let option = {
-        xAxis: {
-          type: 'category',
-          data: ['1', '2', '3', '4', '5', '6', '7']
-        },
-        yAxis: {
-          type: 'value',
-          max: 12,
-        },
-        series: [{
-          data: [2, 4, 8, 1, 5, 7, 3],
-          type: 'line',
-          smooth: true,
-          itemStyle : {
-            normal: {
-              label : {
-              show: true,
-              position: 'top',
-              textStyle: {
-                color: 'black'
-              }
-              }
-            }},
-        }],
-        grid: {
-          x:50,
-          y:15,
-          x2:50,
-          y2:25
-        },
-      };
-      myChart.setOption(option)
-    }
+//    showEcharts() {
+//      let myChart = echarts.init(document.getElementById('echarContentId'))
+//
+//      let option = {
+//        xAxis: {
+//          type: 'category',
+//          data: ['1', '2', '3', '4', '5', '6', '7']
+//        },
+//        yAxis: {
+//          type: 'value',
+//          max: 12,
+//        },
+//        series: [{
+//          data: [2, 4, 8, 1, 5, 7, 3],
+//          type: 'line',
+//          smooth: true,
+//          itemStyle : {
+//            normal: {
+//              label : {
+//              show: true,
+//              position: 'top',
+//              textStyle: {
+//                color: 'black'
+//              }
+//              }
+//            }},
+//        }],
+//        grid: {
+//          x:50,
+//          y:15,
+//          x2:50,
+//          y2:25
+//        },
+//      };
+//      myChart.setOption(option)
+//    },
+    getPeriodRetrieveSummery() {
+      let url = period + '/retrieveSummery'
+      this.$http.get(url).then((response) => {
+        if(response.body.code == 0) {
+          this.newNumber = response.body.content
+        }else {
+          console.log('获取开奖信息失败')
+        }
+      })
+    },
+    getPeriodRetrieveSummery2() {
+      let url = period + '/retrieveSummery'
+      this.$http.get(url).then((response) => {
+        if(response.body.code == 0) {
+          this.newNumber = response.body.content
+        }else {
+          console.log('获取开奖信息失败')
+        }
+      })
+    },
   },
 }
 </script>
@@ -229,27 +271,27 @@ export default {
     height: 40px;
   }
 
-  .echarLeft {
-    float: left;
-    width: 700px;
-    margin-top: 11px;
-    border: 1px solid #dddddd;
-  }
-  .echarLeft>.title {
-    line-height: 34px;
-    font-size: 16px;
-    /*padding-left: 20px;*/
-    text-align: center;
-    font-weight: bold;
-    background-color: #f7f7f7;
-  }
-  .echarLeft>.echarContent {
-    overflow: hidden;
-    height: 180px;
-    /*padding: 0px;*/
+  /*.echarLeft {*/
+    /*float: left;*/
+    /*width: 700px;*/
+    /*margin-top: 11px;*/
+    /*border: 1px solid #dddddd;*/
+  /*}*/
+  /*.echarLeft>.title {*/
+    /*line-height: 34px;*/
+    /*font-size: 16px;*/
+    /*!*padding-left: 20px;*!*/
     /*text-align: center;*/
-    /*background-color: pink;*/
-  }
+    /*font-weight: bold;*/
+    /*background-color: #f7f7f7;*/
+  /*}*/
+  /*.echarLeft>.echarContent {*/
+    /*overflow: hidden;*/
+    /*height: 180px;*/
+    /*!*padding: 0px;*!*/
+    /*!*text-align: center;*!*/
+    /*!*background-color: pink;*!*/
+  /*}*/
   .moreList {
     float: right;
     width: 255px;

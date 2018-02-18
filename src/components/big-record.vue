@@ -1,9 +1,8 @@
 <template>
-  <div class="homepageRecord">
+  <div class="bigRecord">
     <div class="recordContent clearfix">
       <div class="record-title clearfix">
         <span class="text">开奖记录</span>
-        <a href="javascript:;" class="record_title_a" @click="goToBigRecord()">更多></a>
       </div>
       <div class="record-table">
         <table style="width: 100%">
@@ -27,27 +26,8 @@
           </tbody>
         </table>
       </div>
-      <div class="trendAndNews">
-        <div class="echarLeft">
-          <div class="title">
-            冠军走势图
-          </div>
-          <div class="echarContent" id="echarContentId">
-          </div>
-        </div>
-
-        <!--<div class="moreList">-->
-        <!--<div class="more clearfix">-->
-        <!--<a :href="moreAddress" class="more_a">更多>></a>-->
-        <!--</div>-->
-        <!--<div class="List">-->
-        <!--<ul>-->
-        <!--<li v-for="moreList in moreListArr" class="clearfix">-->
-        <!--<span class="circle_li"></span>-->
-        <!--<a :href="moreList.address" class="List_li_a nowrap" :title="moreList.name">{{moreList.name}}</a></li>-->
-        <!--</ul>-->
-        <!--</div>-->
-        <!--</div>-->
+      <div class="pageinfo">
+        <pageComponent :totalSize="20" :pageData="{startLine:0,limitLine:15,pageTo: '/bigRecord'}" v-if="true"></pageComponent>
       </div>
     </div>
   </div>
@@ -55,34 +35,14 @@
 
 <script>
   import $ from 'jquery'
-  // 引入基本模板
-  let echarts = require('echarts/lib/echarts')
-  // 引入柱状图组件
-  require('echarts/lib/chart/bar')
-  require('echarts/lib/chart/line')
-  // 引入提示框和title组件
-  require('echarts/lib/component/tooltip')
-  //  require('echarts/lib/component/title')
+  import pageComponent from './paging'
   export default {
-    name: 'homepageRecord',
+    name: 'bigRecord',
     components: {
+      pageComponent
     },
     data () {
       return {
-        moreListArr: [
-          {
-            name: '马会俱乐部北京上线奖励活动',
-            address: 'www.baidu.com'
-          },
-          {
-            name: '马会俱乐部群23423423',
-            address: 'www.baidu.com'
-          },
-          {
-            name: '马会俱乐部微信wwwwwwwwwwwwwwwwww',
-            address: 'www.baidu.com'
-          }
-        ],
         arr: [
           {
             time: '2018-02-10 19:20',
@@ -120,25 +80,15 @@
       }
     },
     mounted() {
-
     },
     methods: {
-      goToBigRecord() {
-        this.$router.push({
-          name: 'bigRecord',
-          params: {
-            startLine: 0,
-            limitLine: 15
-          }
-        })
-      }
-    }
 
+    }
   }
 </script>
 
 <style scoped>
-  .homepageRecord {
+  .bigRecord {
     width: 1000px;
     margin: 0 auto;
   }
@@ -152,15 +102,6 @@
     padding-left: 19px;
     font-size: 18px;
     color: #333333;
-  }
-  .record_title_a {
-    float: right;
-    display: block;
-    margin-top: 6px;
-    line-height: 30px;
-    font-size: 14px;
-    color: #333333;
-    text-decoration: none;
   }
   .record-table {
 
@@ -234,31 +175,4 @@
     background-color: #716676;
   }
 
-
-
-  .trendAndNews {
-    padding-top: 10px;
-    border-top: 1px solid #ddd;
-  }
-  .echarLeft {
-    float: left;
-    width: 1000px;
-    margin-top: 11px;
-    border: 1px solid #dddddd;
-  }
-  .echarLeft>.title {
-    line-height: 34px;
-    font-size: 16px;
-    /*padding-left: 20px;*/
-    text-align: center;
-    font-weight: bold;
-    background-color: #f7f7f7;
-  }
-  .echarLeft>.echarContent {
-    overflow: hidden;
-    height: 180px;
-    /*padding: 0px;*/
-    /*text-align: center;*/
-    /*background-color: pink;*/
-  }
 </style>
