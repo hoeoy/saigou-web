@@ -1,4 +1,4 @@
-import { SET_CURRENT_USER} from './utils/consts'
+import { SET_REST_TIME} from './utils/consts'
 
 export default {
 

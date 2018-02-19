@@ -7,27 +7,37 @@
       <div class="record-table">
         <table style="width: 100%">
           <tbody>
-            <tr class="tr_title">
-              <th class="tb_tr_th" style="width: 165px">时间</th>
-              <th class="tb_tr_th" style="width:600px;">开奖号码</th>
-              <th class="tb_tr_th" style="width: 50px">单双</th>
-              <th class="tb_tr_th" style="width: 50px">大小</th>
-            </tr>
-            <tr v-for="ar in arr">
-              <td class="tb_tr_th_content">{{ar.time}}</td>
-              <td class="tb_tr_th_content">
+          <tr class="tr_title">
+            <th class="tb_tr_th" style="width: 165px">时间</th>
+            <th class="tb_tr_th" style="width:600px;">开奖号码</th>
+            <th class="tb_tr_th" style="width: 50px">单双</th>
+            <th class="tb_tr_th" style="width: 50px">大小</th>
+          </tr>
+          <tr v-for="ar in arr">
+            <td class="tb_tr_th_content">{{ar.period_stop_time}}</td>
+            <template>
+              <td class="tb_tr_th_content" v-if="ar.arrResult[0]!==null">
                 <div class="nums">
-                  <span :class="'num'+isshunxu" v-for="isshunxu in ar.isshunxus">{{isshunxu}}</span>
+                  <span :class="'num'+Result" v-for="Result in ar.arrResult">{{Result}}</span>
                 </div>
               </td>
-              <td class="tb_tr_th_content" style="color: #ff3030">{{ar.isdouble}}</td>
-              <td class="tb_tr_th_content">{{ar.isbig}}</td>
-            </tr>
+              <td class="tb_tr_th_content" v-else>未开奖</td>
+            </template>
+            <template>
+              <td class="tb_tr_th_content" v-if="ar.odd_even == '1'" style="color: #ff3030">单</td>
+              <td class="tb_tr_th_content" v-else-if="ar.odd_even == '2'" style="color: #ff3030">双</td>
+            </template>
+            <template>
+              <td class="tb_tr_th_content" v-if="ar.little_big == '1'">小</td>
+              <td class="tb_tr_th_content" v-else-if="ar.little_big == '2'">大</td>
+            </template>
+
+          </tr>
           </tbody>
         </table>
       </div>
       <div class="pageinfo">
-        <pageComponent :totalSize="20" :pageData="{startLine:0,limitLine:15,pageTo: '/bigRecord'}" v-if="true"></pageComponent>
+        <pageComponent :totalSize= totalSize :pageData="{startLine:startLine,limitLine:limitLine,pageTo: '/bigRecord'}" v-if="totalSize>0"></pageComponent>
       </div>
     </div>
   </div>
@@ -43,46 +53,73 @@
     },
     data () {
       return {
+        startLine: '0',
+        limitLine: '15',
+        totalSize: '',
         arr: [
           {
-            time: '2018-02-10 19:20',
-            isshunxus: [
+            period_stop_time: '2018-02-10 19:20',
+            arrResult: [
               1,2,3,4,5,6,7,8,9,10
             ],
             isdouble: '双',
-            isbig: '大'
-          },
-          {
-            time: '2018-02-10 19:20',
-            isshunxus: [
-              1,2,3,4,5,6,7,8,9,10
-            ],
-            isdouble: '双',
-            isbig: '大'
-          },
-          {
-            time: '2018-02-10 19:20',
-            isshunxus: [
-              1,2,3,4,5,6,7,8,9,10
-            ],
-            isdouble: '双',
-            isbig: '大'
-          },
-          {
-            time: '2018-02-10 19:20',
-            isshunxus: [
-              1,2,3,4,5,6,7,8,9,10
-            ],
-            isdouble: '双',
-            isbig: '大'
+            little_big: '大'
           }
         ]
       }
     },
+    watch: {
+      '$route': 'getRecord'
+    },
     mounted() {
+      this.getRecord();
     },
     methods: {
-
+      getRecord() {
+        let startLine = this.$route.params.startLine;
+        let limitLine = this.$route.params.limitLine;
+        this.startLine = startLine;
+        this.limitLine = limitLine;
+        let url = period + '/retrieve';
+        let json = {};
+        json.length = this.limitLine;
+        json.orderColumnName = 'ts';
+        json.orderDir = 'desc';
+        json.start = this.startLine;
+        json = JSON.stringify(json)
+        this.$http.post(url,json).then((response) => {
+          if(response.body.msg == '查询成功') {
+            let resultData = response.body.resultData
+            this.totalSize = response.body.total
+            this.getRecordArr(resultData)
+          }else {
+            console.log('获取开奖记录失败')
+          }
+        })
+      },
+      getRecordArr(result) {
+        let arr = [];
+        result.forEach(d=>{
+          let obj = {},arrResult = [];
+          obj.period_stop_time = d.period_stop_time;
+          obj.period_desc = d.period_desc;
+          obj.little_big = d.little_big;
+          obj.odd_even = d.odd_even;
+          arrResult.push(d.f1);
+          arrResult.push(d.f2);
+          arrResult.push(d.f3);
+          arrResult.push(d.f4);
+          arrResult.push(d.f5);
+          arrResult.push(d.f6);
+          arrResult.push(d.f7);
+          arrResult.push(d.f8);
+          arrResult.push(d.f9);
+          arrResult.push(d.f10);
+          obj.arrResult = arrResult;
+          arr.push(obj)
+        })
+        this.arr = arr
+      },
     }
   }
 </script>

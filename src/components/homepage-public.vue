@@ -26,30 +26,7 @@
           </span>
         </div>
       </div>
-      <!--<div class="trendAndNews">-->
-        <!--<div class="echarLeft">-->
-          <!--<div class="title">-->
-            <!--冠军走势图-->
-          <!--</div>-->
-          <!--<div class="echarContent" id="echarContentId">-->
-          <!--</div>-->
-        <!--</div>-->
-
-        <!--<div class="moreList">-->
-          <!--<div class="more clearfix">-->
-            <!--<a :href="moreAddress" class="more_a">更多>></a>-->
-          <!--</div>-->
-          <!--<div class="List">-->
-            <!--<ul>-->
-              <!--<li v-for="moreList in moreListArr" class="clearfix">-->
-                <!--<span class="circle_li"></span>-->
-                <!--<a :href="moreList.address" class="List_li_a nowrap" :title="moreList.name">{{moreList.name}}</a></li>-->
-            <!--</ul>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
     </div>
-
   </div>
 </template>
 <script>
@@ -58,14 +35,6 @@
     mapState,
     mapActions
   } from 'vuex';
-//  // 引入基本模板
-//  let echarts = require('echarts/lib/echarts')
-//  // 引入柱状图组件
-//  require('echarts/lib/chart/bar')
-//  require('echarts/lib/chart/line')
-//  // 引入提示框和title组件
-//  require('echarts/lib/component/tooltip')
-////  require('echarts/lib/component/title')
 export default {
   name: 'homepage-public',
   data () {
@@ -77,101 +46,37 @@ export default {
       },
       restTime: '100',
       interval: null,
-//      moreAddress: 'www.baidu.com',
-//      moreListArr: [
-//        {
-//          name: '马会俱乐部北京上线奖励活动',
-//          address: 'www.baidu.com'
-//        },
-//        {
-//          name: '马会俱乐部群23423423',
-//          address: 'www.baidu.com'
-//        },
-//        {
-//          name: '马会俱乐部微信wwwwwwwwwwwwwwwwww',
-//          address: 'www.baidu.com'
-//        }
-//      ]
 
     }
   },
   computed: {
     ...mapState(['rest_time']),
-//    secTime() {
-//      let rest_time = this.rest_time
-//      let secTime = rest_time%60
-//      return secTime
-//    },
   },
   mounted() {
-    this.restTime = this.rest_time
-    this.interval = setInterval(d=>{
-      this.restTime = this.restTime - 1
-      if(this.restTime == 0) {
-        clearInterval(this.interval)
-      }
-    },1000);
     this.getPeriodRetrieveSummery();
-
-//    this.showEcharts();
   },
   methods: {
-
-//    showEcharts() {
-//      let myChart = echarts.init(document.getElementById('echarContentId'))
-//
-//      let option = {
-//        xAxis: {
-//          type: 'category',
-//          data: ['1', '2', '3', '4', '5', '6', '7']
-//        },
-//        yAxis: {
-//          type: 'value',
-//          max: 12,
-//        },
-//        series: [{
-//          data: [2, 4, 8, 1, 5, 7, 3],
-//          type: 'line',
-//          smooth: true,
-//          itemStyle : {
-//            normal: {
-//              label : {
-//              show: true,
-//              position: 'top',
-//              textStyle: {
-//                color: 'black'
-//              }
-//              }
-//            }},
-//        }],
-//        grid: {
-//          x:50,
-//          y:15,
-//          x2:50,
-//          y2:25
-//        },
-//      };
-//      myChart.setOption(option)
-//    },
+    ...mapActions(['set_rest_time']),
     getPeriodRetrieveSummery() {
       let url = period + '/retrieveSummery'
       this.$http.get(url).then((response) => {
         if(response.body.code == 0) {
-          this.newNumber = response.body.content
+          this.newNumber = response.body.content;
+          this.restTime = response.body.content.rest_second;
+          this.set_rest_time(this.newNumber)
+          this.setIntervalRestTime()
         }else {
           console.log('获取开奖信息失败')
         }
       })
     },
-    getPeriodRetrieveSummery2() {
-      let url = period + '/retrieveSummery'
-      this.$http.get(url).then((response) => {
-        if(response.body.code == 0) {
-          this.newNumber = response.body.content
-        }else {
-          console.log('获取开奖信息失败')
+    setIntervalRestTime() {
+      this.interval = setInterval(d=>{
+        this.restTime = this.restTime - 1
+        if(this.restTime == 0) {
+          clearInterval(this.interval)
         }
-      })
+      },1000);
     },
   },
 }

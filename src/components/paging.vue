@@ -131,7 +131,6 @@ export default {
       this.$router.push({
         path: this.pageData.pageTo + '/' + startLine + '/' + this.limitLine
       })
-      console.log(this.pageData.pageTo + '/' + startLine + '/' + this.limitLine)
     }
   }
 }
@@ -189,5 +188,15 @@ export default {
 .page-holder>select {
   width: 50px;
   height: 26px;
+}
+.skin-page-holder a {
+  border: 1px solid #b3b3b3;
+  color: #333;
+  background-color: #fff;
+}
+.current:hover, .page-holder .current {
+  background-color: #29b3a5;
+  color: #fffefe;
+  border-color: #666;
 }
 </style>

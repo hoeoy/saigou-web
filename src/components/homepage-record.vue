@@ -15,14 +15,21 @@
               <th class="tb_tr_th" style="width: 50px">大小</th>
             </tr>
             <tr v-for="ar in arr">
-              <td class="tb_tr_th_content">{{ar.time}}</td>
+              <td class="tb_tr_th_content">{{ar.period_stop_time}}</td>
               <td class="tb_tr_th_content">
                 <div class="nums">
-                  <span :class="'num'+isshunxu" v-for="isshunxu in ar.isshunxus">{{isshunxu}}</span>
+                  <span :class="'num'+Result" v-for="Result in ar.arrResult">{{Result}}</span>
                 </div>
               </td>
-              <td class="tb_tr_th_content" style="color: #ff3030">{{ar.isdouble}}</td>
-              <td class="tb_tr_th_content">{{ar.isbig}}</td>
+              <template>
+                <td class="tb_tr_th_content" v-if="ar.odd_even == '1'" style="color: #ff3030">单</td>
+                <td class="tb_tr_th_content" v-else-if="ar.odd_even == '2'" style="color: #ff3030">双</td>
+              </template>
+              <template>
+                <td class="tb_tr_th_content" v-if="ar.little_big == '1'">小</td>
+                <td class="tb_tr_th_content" v-else-if="ar.little_big == '2'">大</td>
+              </template>
+
             </tr>
           </tbody>
         </table>
@@ -85,44 +92,77 @@
         ],
         arr: [
           {
-            time: '2018-02-10 19:20',
-            isshunxus: [
+            period_stop_time: '2018-02-10 19:20',
+            arrResult: [
               1,2,3,4,5,6,7,8,9,10
             ],
             isdouble: '双',
-            isbig: '大'
-          },
-          {
-            time: '2018-02-10 19:20',
-            isshunxus: [
-              1,2,3,4,5,6,7,8,9,10
-            ],
-            isdouble: '双',
-            isbig: '大'
-          },
-          {
-            time: '2018-02-10 19:20',
-            isshunxus: [
-              1,2,3,4,5,6,7,8,9,10
-            ],
-            isdouble: '双',
-            isbig: '大'
-          },
-          {
-            time: '2018-02-10 19:20',
-            isshunxus: [
-              1,2,3,4,5,6,7,8,9,10
-            ],
-            isdouble: '双',
-            isbig: '大'
+            little_big: '大'
           }
-        ]
+        ],
+        xAxis: ['1', '2', '3', '4', '5', '6', '7'],
+        yAxis: [2, 4, 8, 1, 5, 7, 3],
       }
     },
     mounted() {
-
+      this.getRecord();
+      this.showEcharts();
     },
     methods: {
+      getRecord() {
+        let url = period + '/retrieve';
+        let json = {
+          "length": 21,
+          "orderColumnName": "ts",
+          "orderDir": "desc",
+          "start": 0
+        };
+        json = JSON.stringify(json)
+        this.$http.post(url,json).then((response) => {
+          if(response.body.msg == '查询成功') {
+            let resultData = response.body.resultData
+            this.getRecordArr(resultData)
+            this.getEchartsArr(resultData)
+          }else {
+            console.log('获取开奖记录失败')
+          }
+        })
+      },
+      getRecordArr(result) {
+        let arr = [];
+        result.forEach(d=>{
+          let obj = {},arrResult = [];
+          obj.period_stop_time = d.period_stop_time;
+          obj.period_desc = d.period_desc;
+          obj.little_big = d.little_big;
+          obj.odd_even = d.odd_even;
+          arrResult.push(d.f1);
+          arrResult.push(d.f2);
+          arrResult.push(d.f3);
+          arrResult.push(d.f4);
+          arrResult.push(d.f5);
+          arrResult.push(d.f6);
+          arrResult.push(d.f7);
+          arrResult.push(d.f8);
+          arrResult.push(d.f9);
+          arrResult.push(d.f10);
+          obj.arrResult = arrResult;
+          arr.push(obj)
+        })
+        arr = arr.slice(1,11)
+        this.arr = arr
+      },
+      getEchartsArr(result) {
+        let xAxis = [];
+        let yAxis = [];
+        result.forEach(d=>{
+          xAxis.push(d.pkvalue);
+          yAxis.push(d.f1);
+        })
+        this.xAxis = xAxis.slice(1,20).reverse();
+        this.yAxis = yAxis.slice(1,20).reverse();
+        this.showEcharts();
+      },
       goToBigRecord() {
         this.$router.push({
           name: 'bigRecord',
@@ -131,9 +171,44 @@
             limitLine: 15
           }
         })
-      }
-    }
+      },
+      showEcharts() {
+        let myChart = echarts.init(document.getElementById('echarContentId'))
 
+        let option = {
+          xAxis: {
+            type: 'category',
+            data: this.xAxis,
+          },
+          yAxis: {
+            type: 'value',
+            max: 12,
+          },
+          series: [{
+            data: this.yAxis,
+            type: 'line',
+            smooth: true,
+            itemStyle : {
+              normal: {
+                label : {
+                  show: true,
+                  position: 'top',
+                  textStyle: {
+                    color: 'black'
+                  }
+                }
+              }},
+          }],
+          grid: {
+            x:50,
+            y:15,
+            x2:50,
+            y2:25
+          },
+        };
+        myChart.setOption(option)
+      },
+    },
   }
 </script>
 
