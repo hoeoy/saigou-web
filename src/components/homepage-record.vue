@@ -153,6 +153,7 @@
         this.arr = arr
       },
       getEchartsArr(result) {
+        console.log(result,'resultresultresultresultresultresultresult')
         let xAxis = [];
         let yAxis = [];
         result.forEach(d=>{

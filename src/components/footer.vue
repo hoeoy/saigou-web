@@ -70,7 +70,7 @@ export default {
     display: inline-block;
     width: 341px;
     height: 80px;
-    background-image: url("../../static/img/logo-top2.png");
+    background-image: url("/static/img/logo-top2.png");
   }
   .footer-text {
     width: 300px;

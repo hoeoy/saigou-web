@@ -6,7 +6,9 @@ import actions from './actions';
 Vue.use(Vuex);
 
 const state = {
-  rest_time: 180
+  rest_time: {
+    rest_second: 30,
+  }
 };
 
 const store = new Vuex.Store({

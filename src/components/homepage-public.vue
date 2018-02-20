@@ -105,7 +105,7 @@ export default {
     display: block;
     width: 129px;
     height: 83px;
-    background-image: url("../../static/img/logo-mid.png");
+    background-image: url("/static/img/logo-mid.png");
   }
 
   .newNumber-info {

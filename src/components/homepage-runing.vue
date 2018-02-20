@@ -112,23 +112,23 @@ export default {
   },
   methods: {
     initDongHua() {
-      clearInterval(this.dogRunInterval)
+      clearInterval(this.dogRunInterval);
       let runwayLeft = 0;
       let runway = {
         left: runwayLeft + 'px'
       };
       this.runway = runway;
-      this.runwayLeft = runwayLeft
-      this.dogObj01 = {left: '0px'}
-      this.dogObj02 = {left: '0px'}
-      this.dogObj03 = {left: '0px'}
-      this.dogObj04 = {left: '0px'}
-      this.dogObj05 = {left: '0px'}
-      this.dogObj06 = {left: '0px'}
-      this.dogObj07 = {left: '0px'}
-      this.dogObj08 = {left: '0px'}
-      this.dogObj09 = {left: '0px'}
-      this.dogObj10 = {left: '0px'}
+      this.runwayLeft = runwayLeft;
+      this.dogObj01 = {left: '0px'};
+      this.dogObj02 = {left: '0px'};
+      this.dogObj03 = {left: '0px'};
+      this.dogObj04 = {left: '0px'};
+      this.dogObj05 = {left: '0px'};
+      this.dogObj06 = {left: '0px'};
+      this.dogObj07 = {left: '0px'};
+      this.dogObj08 = {left: '0px'};
+      this.dogObj09 = {left: '0px'};
+      this.dogObj10 = {left: '0px'};
     },
     hideOrShowTime() {
       this.restRunTime = this.rest_time.rest_second-20;
@@ -137,7 +137,6 @@ export default {
         $('.guanjunhecai').hide();
         this.initDongHua()
       }else if(this.restRunTime<-10){
-        this.showRon()
         $('.guanjunhecai').show();
       }else if(this.restRunTime>=-10&&this.restRunTime<=0){
         $('.runing-time').hide();
@@ -146,9 +145,6 @@ export default {
         clearInterval(this.interval)
       }
       this.setIntervalRestTime();
-    },
-    showRon() {
-      let resultRon = this.resultRon
     },
     dogRun() {
       let arr = this.arr;
@@ -463,8 +459,6 @@ export default {
           let result = response.body.content.animation;
           this.resultRon = response.body.content.f1;
           result = JSON.parse(result);
-          console.log(result,'resultresultresultresultresultresult')
-          //let D1 = [50, 100, 150, 200, 250, 300, 350, 400, 600, 800, 1000];
           this.dogruning01(result.m1);
           this.dogruning02(result.m2);
           this.dogruning03(result.m3);
@@ -489,6 +483,7 @@ export default {
           $('.dog').show();
           this.dogRun();
           this.getDogRuning();
+          this.restRunTime = 0;
           clearInterval(this.interval)
         }
       },1000);
@@ -566,7 +561,7 @@ export default {
     top: 77px;
     width: 5500px;
     height: 533px;
-    background-image: url("../../static/img/runway.png");
+    background-image: url("/static/img/runway.png");
     z-index: 10;
   }
   .runing-dogback{
@@ -582,7 +577,7 @@ export default {
     z-index: 500;
     width: 86px;
     height: 533px;
-    background-image: url("../../static/img/start5.gif");
+    background-image: url("/static/img/start5.gif");
   }
   .runing-mid {
     position: absolute;
@@ -590,7 +585,7 @@ export default {
     width: 179px;
     height: 533px;
     left: 1500px;
-    background-image: url("../../static/img/middle.png");
+    background-image: url("/static/img/middle.png");
   }
   .runing-end {
     position: absolute;
@@ -598,7 +593,7 @@ export default {
     width: 276px;
     height: 630px;
     left: 3000px;
-    background-image: url("../../static/img/runend.png");
+    background-image: url("/static/img/runend.png");
   }
   .dog {
     position: absolute;
@@ -610,42 +605,42 @@ export default {
   }
   .dog1 {
     top: 436px;
-    background-image: url("../../static/img/dog1.png");
+    background-image: url("/static/img/dog1.png");
   }
   .dog2 {
     top: 392px;
-    background-image: url("../../static/img/dog2.png");
+    background-image: url("/static/img/dog2.png");
   }
   .dog3 {
     top: 348px;
-    background-image: url("../../static/img/dog3.png");
+    background-image: url("/static/img/dog3.png");
   }
   .dog4 {
     top: 304px;
-    background-image: url("../../static/img/dog4.png");
+    background-image: url("/static/img/dog4.png");
   }
   .dog5 {
     top: 260px;
-    background-image: url("../../static/img/dog5.png");
+    background-image: url("/static/img/dog5.png");
   }
   .dog6 {
     top: 216px;
-    background-image: url("../../static/img/dog6.png");
+    background-image: url("/static/img/dog6.png");
   }
   .dog7 {
     top: 172px;
-    background-image: url("../../static/img/dog7.png");
+    background-image: url("/static/img/dog7.png");
   }
   .dog8 {
     top: 128px;
-    background-image: url("../../static/img/dog8.png");
+    background-image: url("/static/img/dog8.png");
   }
   .dog9 {
     top: 84px;
-    background-image: url("../../static/img/dog9.png");
+    background-image: url("/static/img/dog9.png");
   }
   .dog10 {
     top: 40px;
-    background-image: url("../../static/img/dog10.png");
+    background-image: url("/static/img/dog10.png");
   }
 </style>
