@@ -63,20 +63,21 @@ export default {
   }
 
   .footer-logo-content {
-    padding: 12px 0px 23px;
+    padding: 6px 0px;
   }
   .footer-logo  {
     float: left;
     display: inline-block;
     width: 341px;
     height: 80px;
-    background-image: url("../../static/img/logo-top.png");
+    background-image: url("../../static/img/logo-top2.png");
   }
   .footer-text {
     width: 300px;
     background:none;
     line-height:24px;
     font-size: 12px;
+    margin-top: 20px;
     color: #999999;;
     float:left;
   }

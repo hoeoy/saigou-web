@@ -46,7 +46,7 @@ export default {
     height: 80px;
     width: 341px;
     float: left;
-    background-image: url("../../static/img/logo-top2.png");
+    background-image: url("/static/img/logo-top2.png");
     /*background-color: pink;*/
   }
   .header-home {

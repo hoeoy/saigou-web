@@ -74,8 +74,9 @@ export default {
       this.interval = setInterval(d=>{
         this.restTime = this.restTime - 1
         if(this.restTime == 0) {
-          this.getPeriodRetrieveSummery();
-          clearInterval(this.interval)
+          //this.getPeriodRetrieveSummery();
+          window.location.reload();
+          //clearInterval(this.interval)
         }
       },1000);
     },
