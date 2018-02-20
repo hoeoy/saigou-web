@@ -44,7 +44,7 @@ export default {
         rest_num: 113,
         current_num: 166,
       },
-      restTime: '100',
+      restTime: '',
       interval: null,
 
     }
@@ -74,6 +74,7 @@ export default {
       this.interval = setInterval(d=>{
         this.restTime = this.restTime - 1
         if(this.restTime == 0) {
+          this.getPeriodRetrieveSummery();
           clearInterval(this.interval)
         }
       },1000);
