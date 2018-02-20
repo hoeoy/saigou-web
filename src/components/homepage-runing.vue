@@ -138,8 +138,10 @@ export default {
         this.initDongHua()
       }else if(this.restRunTime<-10){
         $('.guanjunhecai').show();
+        $('.runing-time').hide();
       }else if(this.restRunTime>=-10&&this.restRunTime<=0){
         $('.runing-time').hide();
+        $('.guanjunhecai').show();
         this.dogRun();
         this.getDogRuning();
         clearInterval(this.interval)
