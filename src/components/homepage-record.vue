@@ -156,7 +156,8 @@
         let xAxis = [];
         let yAxis = [];
         result.forEach(d=>{
-          xAxis.push(d.pkvalue);
+          let s = d.period.slice(8);
+          xAxis.push(s);
           yAxis.push(d.f1);
         })
         this.xAxis = xAxis.slice(1,20).reverse();
