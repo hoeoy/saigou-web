@@ -73,7 +73,7 @@ export default {
     setIntervalRestTime() {
       this.interval = setInterval(d=>{
         this.restTime = this.restTime - 1
-        if(this.restTime == 0) {
+        if(this.restTime <= 0) {
           //this.getPeriodRetrieveSummery();
           window.location.reload();
           //clearInterval(this.interval)

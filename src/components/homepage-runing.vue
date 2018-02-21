@@ -141,7 +141,7 @@ export default {
         $('.runing-time').hide();
       }else if(this.restRunTime>=-10&&this.restRunTime<=0){
         $('.runing-time').hide();
-        $('.guanjunhecai').show();
+        $('.guanjunhecai').hide();
         this.dogRun();
         this.getDogRuning();
         clearInterval(this.interval)
